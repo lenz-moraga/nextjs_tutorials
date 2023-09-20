@@ -5,26 +5,26 @@ import { getIdFromUrl } from "@/helpers/helpers";
 import useFetch from "@/hooks/useFetch";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function Characters() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, loading, error } = useFetch("/character", {
-    page: currentPage,
-  });
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const name = searchParams.get("name") ?? '';
 
-  const onPageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
+  const { data, loading, error } = useFetch("/character", {
+    page,
+    name,
+  });
 
   return (
     <>
-      <h2 className="text-gray-900 mb-6 inline-block text-2xl font-extrabold tracking-tight">
+      <h2 className="text-gray-900 mb-6 inline-block text-2xl font-extrabold tracking-tight text-center w-full mt-4">
         Characters
       </h2>
       {loading && <div>Loading...</div>}
       {error && <div>Error: {error.message}</div>}
-      {data && data.results && (
+      {data?.results && (
         <ul className="grid grid-cols-2 gap-6 ">
           {data.results.map((character) => {
             let statusColor;
@@ -114,11 +114,8 @@ export default function Characters() {
           })}
         </ul>
       )}
-      {data && data.info && (
-        <Pagination
-          paginationInfo={{ ...data.info, currentPage }}
-          onPageChange={onPageChange}
-        />
+      {data?.info && (
+        <Pagination paginationInfo={{ ...data.info, currentPage: page }} />
       )}
     </>
   );

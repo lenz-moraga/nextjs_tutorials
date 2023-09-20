@@ -1,18 +1,25 @@
 "use client";
 
-const Pagination = ({ onPageChange, paginationInfo }) => {
+import useUrlParams from "@/hooks/useUrlParams";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+
+const Pagination = ({ paginationInfo }) => {
   const { currentPage, pages, next, prev } = paginationInfo;
   const prevPage = prev && new URL(prev).searchParams.get("page");
   const nextPage = next && new URL(next).searchParams.get("page");
 
-  const handlePageChange = (newPage) => {
+  const router = useRouter();
+  const { createQueryString } = useUrlParams();
+
+  const handlePageChange = useCallback((newPage) => {
     if (newPage >= 1 && newPage <= pages) {
-      onPageChange(newPage);
+      router.push(`/characters?${createQueryString("page", newPage)}`);
     }
-  };
+  }, []);
 
   return (
-    <div className="flex items-center h-8 justify-between mt-8 gap-4">
+    <div className="flex items-center h-8 justify-center mt-8 gap-4">
       <button
         className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed"
         disabled={!prev}
@@ -38,7 +45,7 @@ const Pagination = ({ onPageChange, paginationInfo }) => {
       <button
         className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed"
         disabled={!prev}
-        onClick={() => handlePageChange(currentPage - 1)}
+        onClick={() => handlePageChange(Number(currentPage) - 1)}
       >
         {prevPage ?? 0}
       </button>
@@ -48,7 +55,7 @@ const Pagination = ({ onPageChange, paginationInfo }) => {
       <button
         className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed"
         disabled={!next}
-        onClick={() => handlePageChange(currentPage + 1)}
+        onClick={() => handlePageChange(Number(currentPage) + 1)}
       >
         {nextPage ?? pages + 1}
       </button>

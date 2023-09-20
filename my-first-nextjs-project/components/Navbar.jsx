@@ -1,10 +1,12 @@
 "use client";
 
+import useUrlParams from "@/hooks/useUrlParams";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { createQueryString } = useUrlParams();
 
   return (
     <nav className="flex px-4 space-x-4 bg-gray-900 text-white items-center justify-between">
@@ -28,7 +30,7 @@ export default function Navbar() {
             className={`text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
               pathname.includes("/characters") ? "bg-violet-700" : ""
             }`}
-            href={"/characters"}
+            href={`/characters?${createQueryString("page", "1")}`}
           >
             characters
           </Link>

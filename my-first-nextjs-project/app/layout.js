@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { Montserrat } from "next/font/google";
 import "./global.css";
+import SearchBar from "@/components/SearchBar";
 
 export const metadata = {
   title: "Next.js",
