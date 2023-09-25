@@ -25,11 +25,16 @@ export default function useFetch(
           `https://rickandmortyapi.com/api${url}/?${params}`
         );
 
+        const result = await response.json();
+        
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          if (response.status === 404) {
+            throw new Error(result.error);
+          } else {
+            throw new Error("Network response was not ok");
+          }
         }
 
-        const result = await response.json();
         setData(result);
       } catch (err) {
         setError(err);
