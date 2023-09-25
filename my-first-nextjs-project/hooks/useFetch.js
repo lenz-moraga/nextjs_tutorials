@@ -26,7 +26,7 @@ export default function useFetch(
         );
 
         const result = await response.json();
-        
+
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error(result.error);
@@ -44,6 +44,12 @@ export default function useFetch(
     }
 
     fetchData();
+
+    return () => {
+      setData(null);
+      setError(null);
+      setLoading(false);
+    };
   }, [params, url]);
 
   return { data, error, loading };
