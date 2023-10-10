@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.0-rc.2",
+    "@apollo/experimental-nextjs-app-support": "^0.4.3",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "lodash.debounce": "^4.0.8",
